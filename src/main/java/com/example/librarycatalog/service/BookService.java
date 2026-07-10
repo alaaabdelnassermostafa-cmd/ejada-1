@@ -2,6 +2,8 @@ package com.example.librarycatalog.service;
 
 import com.example.librarycatalog.entity.Author;
 import com.example.librarycatalog.entity.Book;
+import com.example.librarycatalog.exception.DuplicateResourceException;
+import com.example.librarycatalog.exception.ResourceNotFoundException;
 import com.example.librarycatalog.repository.AuthorRepository;
 import com.example.librarycatalog.repository.BookRepository;
 import org.springframework.stereotype.Service;
@@ -21,9 +23,9 @@ public class BookService {
 
     public Book createBook(Long authorId, Book book) {
         Author author = authorRepository.findById(authorId)
-                .orElseThrow(() -> new RuntimeException("Author not found with id: " + authorId));
+                .orElseThrow(() -> new ResourceNotFoundException("Author not found with id: " + authorId));
         if (bookRepository.existsByIsbn(book.getIsbn())) {
-            throw new RuntimeException("Book with ISBN '" + book.getIsbn() + "' already exists");
+            throw new DuplicateResourceException("Book with ISBN '" + book.getIsbn() + "' already exists");
         }
         book.setAuthor(author);
         return bookRepository.save(book);
@@ -31,7 +33,7 @@ public class BookService {
 
     public Book getBookById(Long id) {
         return bookRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Book not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Book not found with id: " + id));
     }
 
     public List<Book> getAllBooks() {
@@ -45,6 +47,11 @@ public class BookService {
     public Book updateBook(Long id, Book updated) {
         Book existing = getBookById(id);
         existing.setTitle(updated.getTitle());
+        
+        if (!existing.getIsbn().equals(updated.getIsbn()) && bookRepository.existsByIsbn(updated.getIsbn())) {
+             throw new DuplicateResourceException("Book with ISBN '" + updated.getIsbn() + "' already exists");
+        }
+        
         existing.setIsbn(updated.getIsbn());
         existing.setPublishedYear(updated.getPublishedYear());
         return bookRepository.save(existing);
