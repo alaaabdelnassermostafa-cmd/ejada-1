@@ -4,7 +4,7 @@ A Spring Boot library catalog system built as an intern project, featuring full 
 
 [![Docker Hub](https://img.shields.io/badge/Docker%20Hub-alaaabdelnaser%2Flibrary--api-blue?logo=docker)](https://hub.docker.com/r/alaaabdelnaser/library-api)
 
-## 🐳 Docker Hub Image
+## Docker Hub Image
 > **Public image:** [`alaaabdelnaser/library-api:1.0`](https://hub.docker.com/r/alaaabdelnaser/library-api)
 
 Pull and run directly:
@@ -29,7 +29,7 @@ docker run -p 8080:8080 alaaabdelnaser/library-api:1.0
 - Springdoc OpenAPI (Swagger)
 - Docker & Docker Compose
 
-## 🚀 Running with Docker (Recommended)
+## Running with Docker (Recommended)
 
 ### 1. Start all dependencies
 ```bash
